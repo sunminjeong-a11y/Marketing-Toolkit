@@ -1734,7 +1734,7 @@ function KitDetail({ kit, setSelectedKit, setPage }) {
                 style={{
                   fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
                   fontSize: 15,
-                  color: "#999",
+                  color: "#000",
                 }}
               >
                 {kit.subtitle}
@@ -2356,7 +2356,7 @@ function DocCard({ doc, downloading, onDownload }) {
           style={{
             fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
             fontSize: 13,
-            color: "#999",
+            color: "#000",
             lineHeight: 1.55,
             marginBottom: 18,
           }}
@@ -3587,7 +3587,7 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
               >
                 Brand Kit
               </h1>
-              <p style={{ fontFamily: ff, fontSize: 15, color: "#999" }}>
+              <p style={{ fontFamily: ff, fontSize: 15, color: "#000" }}>
                 Communication Materials for Social Media
               </p>
             </div>
