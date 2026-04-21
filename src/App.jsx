@@ -1694,20 +1694,31 @@ function KitDetail({ kit, setSelectedKit, setPage }) {
         <button
           onClick={() => setSelectedKit(null)}
           style={{
-            background: "none",
-            border: "none",
+            background: "#f5f5f3",
+            border: "1.5px solid #e0e0da",
+            borderRadius: 8,
             fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
             fontSize: 14,
-            color: "#888",
+            color: "#444",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
             gap: 6,
             marginBottom: 32,
-            padding: 0,
+            padding: "8px 16px",
+            fontWeight: 500,
+            transition: "background 0.15s, border-color 0.15s, color 0.15s",
           }}
-          onMouseEnter={(e) => (e.target.style.color = "#1a1a1a")}
-          onMouseLeave={(e) => (e.target.style.color = "#888")}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "#ebebе8";
+            e.currentTarget.style.borderColor = "#bbb";
+            e.currentTarget.style.color = "#111";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "#f5f5f3";
+            e.currentTarget.style.borderColor = "#e0e0da";
+            e.currentTarget.style.color = "#444";
+          }}
         >
           ← Back to Toolkit
         </button>
@@ -3551,20 +3562,31 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
         <button
           onClick={() => setSelectedKit(null)}
           style={{
-            background: "none",
-            border: "none",
+            background: "#f5f5f3",
+            border: "1.5px solid #e0e0da",
+            borderRadius: 8,
             fontFamily: ff,
             fontSize: 14,
-            color: "#888",
+            color: "#444",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
             gap: 6,
             marginBottom: 32,
-            padding: 0,
+            padding: "8px 16px",
+            fontWeight: 500,
+            transition: "background 0.15s, border-color 0.15s, color 0.15s",
           }}
-          onMouseEnter={(e) => (e.target.style.color = "#1a1a1a")}
-          onMouseLeave={(e) => (e.target.style.color = "#888")}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.background = "#ebebе8";
+            e.currentTarget.style.borderColor = "#bbb";
+            e.currentTarget.style.color = "#111";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.background = "#f5f5f3";
+            e.currentTarget.style.borderColor = "#e0e0da";
+            e.currentTarget.style.color = "#444";
+          }}
         >
           ← Back to Toolkit
         </button>
