@@ -2510,7 +2510,7 @@ function PrivacyPage() {
             opacity: 0.5,
           }}
         />
-        <div style={{ maxWidth: 600, position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: 600, position: "relative", zIndex: 1, margin: "0 auto", textAlign: "center" }}>
           <AnimatedSection>
             <div
               style={{
@@ -2554,6 +2554,7 @@ function PrivacyPage() {
                 color: "rgba(255,255,255,0.55)",
                 lineHeight: 1.7,
                 maxWidth: 520,
+                margin: "0 auto",
               }}
             >
               An end-to-end secure platform that protects your classroom data
