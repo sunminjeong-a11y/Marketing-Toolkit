@@ -3690,7 +3690,7 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
                     key={i}
                     style={{
                       background: "#fff",
-                      borderRadius: 14,
+                      borderRadius: 16,
                       border: "1.5px solid #e8e8e4",
                       overflow: "hidden",
                     }}
@@ -3698,7 +3698,7 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
                     <div
                       style={{
                         width: "100%",
-                        height: 140,
+                        height: 160,
                         background: "#F4FBF7",
                         overflow: "hidden",
                         position: "relative",
@@ -3759,7 +3759,7 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
                         {doc.type}
                       </div>
                     </div>
-                    <div style={{ padding: "14px 18px 16px" }}>
+                    <div style={{ padding: "18px 22px 22px" }}>
                       <h4
                         style={{
                           fontFamily: ff,
