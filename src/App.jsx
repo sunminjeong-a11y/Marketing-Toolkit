@@ -163,6 +163,26 @@ const FALLBACK_KITS = [
   },
 ];
 
+const SCHOOL_DOC_ORDER = [
+  "StoryLine Overview For Schools",
+  "StoryLine Onboarding Guideline",
+  "Sample Parent Communication Email",
+  "No cameras",
+  "Existing cameras",
+];
+
+function sortSchoolDocs(docs) {
+  return [...docs].sort((a, b) => {
+    const rank = (title) => {
+      const idx = SCHOOL_DOC_ORDER.findIndex((keyword) =>
+        title.toLowerCase().includes(keyword.toLowerCase())
+      );
+      return idx === -1 ? 99 : idx;
+    };
+    return rank(a.title) - rank(b.title);
+  });
+}
+
 async function fetchKits() {
   if (!SUPABASE_ANON || SUPABASE_ANON === "여기에_anon_key_붙여넣기")
     return FALLBACK_KITS;
@@ -203,10 +223,11 @@ async function fetchKits() {
     }
     console.log("grouped keys:", Object.keys(grouped));
     return ["school", "teacher", "parent", "brand"].map((slug) => {
-      const docs =
+      let docs =
         grouped[slug] ||
         FALLBACK_KITS.find((k) => k.id === slug)?.documents ||
         [];
+      if (slug === "school") docs = sortSchoolDocs(docs);
       console.log(
         slug + " docs:",
         docs.length,
