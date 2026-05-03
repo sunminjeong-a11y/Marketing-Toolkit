@@ -334,7 +334,10 @@ function Navbar({ setPage, setSelectedKit, kits = [], page, selectedKit }) {
     {
       label: "Privacy & Security",
       activePage: "privacy",
-      action: () => setPage("privacy"),
+      action: () => {
+        setPage("privacy");
+        setSelectedKit(null);
+      },
     },
   ];
   const handleNav = (action) => {
