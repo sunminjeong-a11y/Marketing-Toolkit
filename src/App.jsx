@@ -2453,19 +2453,17 @@ function DocCard({ doc, downloading, onDownload }) {
               onClick={onDownload}
               style={{
                 ...btnBase,
-                background: downloading ? "#E0FBF4" : "#fff",
+                background: "#30E9BD",
                 border: "1.5px solid #30E9BD",
-                color: "#30E9BD",
+                color: "#fff",
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.background = "#30E9BD";
-                e.currentTarget.style.color = "#fff";
+                e.currentTarget.style.background = "#1FCFA5";
+                e.currentTarget.style.borderColor = "#1FCFA5";
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.background = downloading
-                  ? "#E0FBF4"
-                  : "#fff";
-                e.currentTarget.style.color = "#30E9BD";
+                e.currentTarget.style.background = "#30E9BD";
+                e.currentTarget.style.borderColor = "#30E9BD";
               }}
             >
               {downloading ? (
