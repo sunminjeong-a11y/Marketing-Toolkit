@@ -136,6 +136,26 @@ const FALLBACK_KITS = [
     docs: 3,
     documents: [
       {
+        type: "Kit",
+        title: "StoryLine Brand Kit",
+        desc: "Full brand asset package — logos, wordmarks, signatures, and source files.",
+        date: "2026-05-03",
+        file_url:
+          "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/Storyline-Brand-Kit.zip",
+        thumbnail_url:
+          "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/brand-kit-thumbnail-d.png",
+      },
+      {
+        type: "Guideline",
+        title: "StoryLine Brand Guidelines",
+        desc: "Official StoryLine brand guidelines — logo, color, typography, and usage rules.",
+        date: "2026-05-03",
+        file_url:
+          "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/Storyline_BrandGuidelines.pdf",
+        thumbnail_url:
+          "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/brand-guidelines-thumbnail.png",
+      },
+      {
         type: "Video",
         title: "StoryLine Introduction Video",
         desc: "Official StoryLine introduction video for social-media use.",
@@ -143,45 +163,9 @@ const FALLBACK_KITS = [
         file_url: null,
         thumbnail_url: null,
       },
-      {
-        type: "Logo",
-        title: "StoryLine Logo",
-        desc: "Official StoryLine logo assets — symbol, wordmark, signature.",
-        date: "2026-03-16",
-        file_url: null,
-        thumbnail_url: null,
-      },
-      {
-        type: "Logo",
-        title: "Playtag Logo",
-        desc: "Official Playtag logo assets for co-branding use.",
-        date: "2026-03-16",
-        file_url: null,
-        thumbnail_url: null,
-      },
     ],
   },
 ];
-
-const SCHOOL_DOC_ORDER = [
-  "StoryLine Overview For Schools",
-  "StoryLine Onboarding Guideline",
-  "Sample Parent Communication Email",
-  "No cameras",
-  "Existing cameras",
-];
-
-function sortSchoolDocs(docs) {
-  return [...docs].sort((a, b) => {
-    const rank = (title) => {
-      const idx = SCHOOL_DOC_ORDER.findIndex((keyword) =>
-        title.toLowerCase().includes(keyword.toLowerCase())
-      );
-      return idx === -1 ? 99 : idx;
-    };
-    return rank(a.title) - rank(b.title);
-  });
-}
 
 async function fetchKits() {
   if (!SUPABASE_ANON || SUPABASE_ANON === "여기에_anon_key_붙여넣기")
@@ -223,11 +207,10 @@ async function fetchKits() {
     }
     console.log("grouped keys:", Object.keys(grouped));
     return ["school", "teacher", "parent", "brand"].map((slug) => {
-      let docs =
+      const docs =
         grouped[slug] ||
         FALLBACK_KITS.find((k) => k.id === slug)?.documents ||
         [];
-      if (slug === "school") docs = sortSchoolDocs(docs);
       console.log(
         slug + " docs:",
         docs.length,
@@ -295,6 +278,22 @@ function scrollToId(id) {
       top: el.getBoundingClientRect().top + window.scrollY - 80,
       behavior: "smooth",
     });
+}
+
+function getFileExt(url) {
+  if (!url) return "";
+  const path = url.split("?")[0].split("#")[0];
+  const m = path.match(/\.([a-zA-Z0-9]+)$/);
+  return m ? m[1].toUpperCase() : "";
+}
+
+function formatFileSize(bytes) {
+  if (!bytes && bytes !== 0) return "";
+  if (bytes < 1024) return bytes + " B";
+  if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
+  if (bytes < 1024 * 1024 * 1024)
+    return (bytes / (1024 * 1024)).toFixed(1) + " MB";
+  return (bytes / (1024 * 1024 * 1024)).toFixed(1) + " GB";
 }
 
 function Navbar({ setPage, setSelectedKit, kits = [], page, selectedKit }) {
@@ -1694,33 +1693,45 @@ function KitDetail({ kit, setSelectedKit, setPage }) {
         <button
           onClick={() => setSelectedKit(null)}
           style={{
-            background: "#f5f5f3",
-            border: "1.5px solid #e0e0da",
-            borderRadius: 8,
+            background: "#fff",
+            border: "1.5px solid #e8e8e4",
+            borderRadius: 100,
+            padding: "8px 18px 8px 14px",
             fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
-            fontSize: 14,
-            color: "#444",
+            fontSize: 13,
+            fontWeight: 600,
+            color: "#555",
             cursor: "pointer",
-            display: "flex",
+            display: "inline-flex",
             alignItems: "center",
             gap: 6,
             marginBottom: 32,
-            padding: "8px 16px",
-            fontWeight: 500,
-            transition: "background 0.15s, border-color 0.15s, color 0.15s",
+            transition: "all 0.2s",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#ebebе8";
-            e.currentTarget.style.borderColor = "#bbb";
-            e.currentTarget.style.color = "#111";
+            e.currentTarget.style.background = "#1a1a1a";
+            e.currentTarget.style.borderColor = "#1a1a1a";
+            e.currentTarget.style.color = "#fff";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#f5f5f3";
-            e.currentTarget.style.borderColor = "#e0e0da";
-            e.currentTarget.style.color = "#444";
+            e.currentTarget.style.background = "#fff";
+            e.currentTarget.style.borderColor = "#e8e8e4";
+            e.currentTarget.style.color = "#555";
           }}
         >
-          ← Back to Toolkit
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back to home
         </button>
       </AnimatedSection>
       <AnimatedSection delay={100}>
@@ -1766,7 +1777,7 @@ function KitDetail({ kit, setSelectedKit, setPage }) {
                 style={{
                   fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
                   fontSize: 15,
-                  color: "#000",
+                  color: "#999",
                 }}
               >
                 {kit.subtitle}
@@ -1846,7 +1857,8 @@ function DocThumbnail({ type, title, thumbnailUrl }) {
           width: "100%",
           height: "100%",
           objectFit: "cover",
-          objectPosition: "top",
+          objectPosition:
+            title === "StoryLine Brand Guidelines" ? "center" : "top",
           display: "block",
         }}
         onError={(e) => {
@@ -2307,7 +2319,27 @@ function DownloadModal({ onConfirm, onClose }) {
 
 function DocCard({ doc, downloading, onDownload }) {
   const [hovered, setHovered] = useState(false);
+  const [fileSize, setFileSize] = useState(null);
   const hasFile = !!doc.file_url;
+  const ext = getFileExt(doc.file_url);
+
+  useEffect(() => {
+    if (!doc.file_url) return;
+    let cancelled = false;
+    fetch(doc.file_url, { method: "HEAD" })
+      .then((r) => {
+        const len = r.headers.get("content-length");
+        if (!cancelled && len) setFileSize(parseInt(len, 10));
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [doc.file_url]);
+
+  const meta = hasFile
+    ? [ext, formatFileSize(fileSize)].filter(Boolean).join(" · ")
+    : "";
   const btnBase = {
     borderRadius: 100,
     padding: "8px 20px",
@@ -2388,7 +2420,7 @@ function DocCard({ doc, downloading, onDownload }) {
           style={{
             fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
             fontSize: 13,
-            color: "#000",
+            color: "#999",
             lineHeight: 1.55,
             marginBottom: 18,
           }}
@@ -2409,7 +2441,7 @@ function DocCard({ doc, downloading, onDownload }) {
               color: "#bbb",
             }}
           >
-            Updated {doc.date}
+            {meta}
           </span>
 
           {/* ✅ 핵심 수정: file_url 없으면 Coming soon, 있으면 window.open으로 새 탭 */}
@@ -2510,7 +2542,7 @@ function PrivacyPage() {
             opacity: 0.5,
           }}
         />
-        <div style={{ maxWidth: 600, position: "relative", zIndex: 1, margin: "0 auto", textAlign: "center" }}>
+        <div style={{ maxWidth: 600, position: "relative", zIndex: 1 }}>
           <AnimatedSection>
             <div
               style={{
@@ -2554,7 +2586,6 @@ function PrivacyPage() {
                 color: "rgba(255,255,255,0.55)",
                 lineHeight: 1.7,
                 maxWidth: 520,
-                margin: "0 auto",
               }}
             >
               An end-to-end secure platform that protects your classroom data
@@ -2656,7 +2687,6 @@ function PrivacyPage() {
 }
 
 function BrandKitPage({ kit, setSelectedKit, setPage }) {
-  const [activeTab, setActiveTab] = useState("overview");
   const [modalDoc, setModalDoc] = useState(null);
 
   const handleBrandDownload = (fileUrl, title) => {
@@ -2680,869 +2710,8 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
     window.open(modalDoc.fileUrl, "_blank", "noopener,noreferrer");
     setModalDoc(null);
   };
-  const tabs = [
-    { id: "overview", label: "Overview" },
-    { id: "logo", label: "Logo" },
-    { id: "colors", label: "Colors" },
-    { id: "typography", label: "Typography" },
-    { id: "incorrect", label: "Incorrect Use" },
-    { id: "partnership", label: "Partnership" },
-    { id: "naming", label: "Naming" },
-    { id: "contact", label: "Contact" },
-  ];
   const ff = "'Pretendard Variable','Pretendard',sans-serif";
   const ffSuit = "'SUIT Variable','SUIT',sans-serif";
-  const badge = (text, color = "#30E9BD") => (
-    <span
-      style={{
-        display: "inline-block",
-        fontFamily: ff,
-        fontSize: 12,
-        fontWeight: 700,
-        color,
-        background: color + "18",
-        border: "1px solid " + color + "40",
-        borderRadius: 100,
-        padding: "4px 12px",
-        marginBottom: 16,
-      }}
-    >
-      {text}
-    </span>
-  );
-  const card = (children, style) => (
-    <div
-      style={{
-        background: "#fff",
-        borderRadius: 16,
-        border: "1.5px solid #e8e8e4",
-        padding: 32,
-        ...style,
-      }}
-    >
-      {children}
-    </div>
-  );
-
-  const renderTab = () => {
-    if (activeTab === "overview")
-      return (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-            gap: 20,
-          }}
-        >
-          {card(
-            <>
-              {badge("Brand Overview")}
-              <h2
-                style={{
-                  fontFamily: ffSuit,
-                  fontSize: 26,
-                  fontWeight: 900,
-                  color: "#1a1a1a",
-                  marginBottom: 14,
-                }}
-              >
-                StoryLine Brand Guidelines
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 24,
-                }}
-              >
-                This guide defines the core visual identity of StoryLine — logo
-                usage, wordmark rules, signature applications, color system,
-                typography, co-branding expressions, and corporate naming
-                conventions.
-              </p>
-              {[
-                ["Logo System", "Symbol · Wordmark · Signature"],
-                ["Color System", "Primary · Supporting · Mono"],
-                ["Typography", "SUIT · Pretendard"],
-                ["Co-branding", "Partner · Playtag"],
-              ].map(([t, s]) => (
-                <div
-                  key={t}
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    padding: "14px 16px",
-                    background: "#f7f7f5",
-                    borderRadius: 10,
-                    marginBottom: 10,
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: ff,
-                      fontSize: 14,
-                      fontWeight: 700,
-                      color: "#1a1a1a",
-                    }}
-                  >
-                    {t}
-                  </span>
-                  <span style={{ fontFamily: ff, fontSize: 13, color: "#aaa" }}>
-                    {s}
-                  </span>
-                </div>
-              ))}
-            </>
-          )}
-          <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-            {card(
-              <>
-                {badge("Primary Typefaces")}
-                <h3
-                  style={{
-                    fontFamily: ffSuit,
-                    fontSize: 22,
-                    fontWeight: 900,
-                    color: "#1a1a1a",
-                    marginBottom: 10,
-                  }}
-                >
-                  SUIT & Pretendard
-                </h3>
-                <p
-                  style={{
-                    fontFamily: ff,
-                    fontSize: 14,
-                    color: "#888",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  SUIT for product interfaces. Pretendard for web, advertising,
-                  and presentations.
-                </p>
-              </>
-            )}
-            {card(
-              <>
-                {badge("Core Colors")}
-                <h3
-                  style={{
-                    fontFamily: ffSuit,
-                    fontSize: 20,
-                    fontWeight: 900,
-                    color: "#1a1a1a",
-                    marginBottom: 10,
-                  }}
-                >
-                  #30E9BD · #FFFFFF · #40CAF5
-                </h3>
-                <p
-                  style={{
-                    fontFamily: ff,
-                    fontSize: 14,
-                    color: "#888",
-                    lineHeight: 1.6,
-                  }}
-                >
-                  Green, white, and blue anchor the StoryLine color system.
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-      );
-    if (activeTab === "logo")
-      return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          {card(
-            <>
-              {badge("Logo System")}
-              <h2
-                style={{
-                  fontFamily: ffSuit,
-                  fontSize: 24,
-                  fontWeight: 900,
-                  color: "#1a1a1a",
-                  marginBottom: 12,
-                }}
-              >
-                Logo, Wordmark & Signature
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 24,
-                }}
-              >
-                The StoryLine logo system includes the symbol, wordmark, and
-                official signature lockups. Always maintain clear space,
-                preserve original proportions, and avoid distortion or
-                recoloring.
-              </p>
-              <div
-                style={{
-                  background: "#f4f4f2",
-                  borderRadius: 12,
-                  padding: "28px 24px",
-                  marginBottom: 20,
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 16,
-                    marginBottom: 10,
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 52,
-                      height: 52,
-                      borderRadius: 14,
-                      background: "linear-gradient(135deg,#30E9BD,#40CAF5)",
-                      flexShrink: 0,
-                    }}
-                  />
-                  <span
-                    style={{
-                      fontFamily: ffSuit,
-                      fontSize: 32,
-                      fontWeight: 900,
-                      color: "#1a1a1a",
-                    }}
-                  >
-                    StoryLine
-                  </span>
-                </div>
-                <p
-                  style={{
-                    fontFamily: ff,
-                    fontSize: 12,
-                    color: "#999",
-                    margin: 0,
-                  }}
-                >
-                  Minimum size: 20px for mobile / 7mm for print
-                </p>
-              </div>
-              {[
-                "Use the wordmark in its original SUIT-typeface form — no redrawing.",
-                "Maintain minimum clear space based on the x-height of lowercase “n”.",
-                "Use vertical signature for service layouts; horizontal for web and presentations.",
-                "Supporting symbol variants (reversed, grayscale) should only be used in limited contexts.",
-              ].map((t, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: "flex",
-                    gap: 10,
-                    alignItems: "flex-start",
-                    marginBottom: 10,
-                  }}
-                >
-                  <span
-                    style={{ color: "#30E9BD", fontSize: 16, marginTop: 1 }}
-                  >
-                    ·
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: ff,
-                      fontSize: 14,
-                      color: "#555",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {t}
-                  </span>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-      );
-    if (activeTab === "colors")
-      return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          {card(
-            <>
-              {badge("Color System")}
-              <h2
-                style={{
-                  fontFamily: ffSuit,
-                  fontSize: 24,
-                  fontWeight: 900,
-                  color: "#1a1a1a",
-                  marginBottom: 12,
-                }}
-              >
-                Primary & Supporting Colors
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 24,
-                }}
-              >
-                StoryLine’s core palette is green, white, blue, and the official
-                gradient. Supporting and monochrome tones extend the visual
-                language across all environments.
-              </p>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
-                  gap: 16,
-                }}
-              >
-                {[
-                  {
-                    name: "Gradient",
-                    hex: "#30E9BD → #40CAF5",
-                    bg: "linear-gradient(135deg,#30E9BD,#40CAF5)",
-                  },
-                  { name: "StoryLine Green", hex: "#30E9BD", bg: "#30E9BD" },
-                  {
-                    name: "StoryLine White",
-                    hex: "#FFFFFF",
-                    bg: "#FFFFFF",
-                    border: true,
-                  },
-                  { name: "StoryLine Blue", hex: "#40CAF5", bg: "#40CAF5" },
-                  {
-                    name: "Supporting 01",
-                    hex: "#F1FFFC",
-                    bg: "#F1FFFC",
-                    border: true,
-                  },
-                  { name: "Supporting 02", hex: "#D6FBF2", bg: "#D6FBF2" },
-                  { name: "Highlight", hex: "#ACF6E5", bg: "#ACF6E5" },
-                  { name: "Supporting 05", hex: "#59EDCA", bg: "#59EDCA" },
-                ].map((c) => (
-                  <div
-                    key={c.name}
-                    style={{
-                      borderRadius: 12,
-                      border: "1.5px solid #e8e8e4",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        height: 80,
-                        background: c.bg,
-                        border: c.border ? "1px solid #eee" : "none",
-                      }}
-                    />
-                    <div style={{ padding: "12px 14px" }}>
-                      <div
-                        style={{
-                          fontFamily: ff,
-                          fontSize: 13,
-                          fontWeight: 700,
-                          color: "#1a1a1a",
-                          marginBottom: 3,
-                        }}
-                      >
-                        {c.name}
-                      </div>
-                      <div
-                        style={{ fontFamily: ff, fontSize: 12, color: "#aaa" }}
-                      >
-                        {c.hex}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      );
-    if (activeTab === "typography")
-      return (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 20,
-          }}
-        >
-          {card(
-            <>
-              {badge("Primary Typeface")}
-              <h2
-                style={{
-                  fontFamily: ffSuit,
-                  fontSize: 24,
-                  fontWeight: 900,
-                  color: "#1a1a1a",
-                  marginBottom: 12,
-                }}
-              >
-                SUIT Variable
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 20,
-                }}
-              >
-                Used for all product UI, headlines, and display text. Weight
-                range: 100–900.
-              </p>
-              <div
-                style={{ background: "#f7f7f5", borderRadius: 10, padding: 20 }}
-              >
-                <div
-                  style={{
-                    fontFamily: ffSuit,
-                    fontSize: 36,
-                    fontWeight: 900,
-                    color: "#1a1a1a",
-                    marginBottom: 4,
-                  }}
-                >
-                  Aa
-                </div>
-                <div
-                  style={{ fontFamily: ffSuit, fontSize: 14, color: "#888" }}
-                >
-                  SUIT Variable · 900 / 700 / 400
-                </div>
-              </div>
-            </>
-          )}
-          {card(
-            <>
-              {badge("Supporting Typeface")}
-              <h2
-                style={{
-                  fontFamily: ff,
-                  fontSize: 24,
-                  fontWeight: 700,
-                  color: "#1a1a1a",
-                  marginBottom: 12,
-                }}
-              >
-                Pretendard Variable
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 20,
-                }}
-              >
-                Used for body copy, captions, and all web/presentation content.
-                Weight range: 100–900.
-              </p>
-              <div
-                style={{ background: "#f7f7f5", borderRadius: 10, padding: 20 }}
-              >
-                <div
-                  style={{
-                    fontFamily: ff,
-                    fontSize: 36,
-                    fontWeight: 700,
-                    color: "#1a1a1a",
-                    marginBottom: 4,
-                  }}
-                >
-                  Aa
-                </div>
-                <div style={{ fontFamily: ff, fontSize: 14, color: "#888" }}>
-                  Pretendard Variable · 700 / 500 / 400
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      );
-    if (activeTab === "incorrect")
-      return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          {card(
-            <>
-              {badge("Incorrect Use", "#ff6b6b")}
-              <h2
-                style={{
-                  fontFamily: ffSuit,
-                  fontSize: 24,
-                  fontWeight: 900,
-                  color: "#1a1a1a",
-                  marginBottom: 8,
-                }}
-              >
-                What to Avoid
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 24,
-                }}
-              >
-                Improper logo usage undermines brand consistency. When in doubt,
-                contact{" "}
-                <a href="mailto:pr@playtag.ai" style={{ color: "#30E9BD" }}>
-                  pr@playtag.ai
-                </a>{" "}
-                before applying.
-              </p>
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-                  gap: 16,
-                }}
-              >
-                <div
-                  style={{
-                    background: "#f0fdf8",
-                    borderRadius: 12,
-                    padding: 20,
-                    border: "1px solid #c6f6e8",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: ff,
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: "#30E9BD",
-                      marginBottom: 12,
-                    }}
-                  >
-                    Recommended
-                  </div>
-                  {[
-                    "Use the official symbol, wordmark, and signature",
-                    "Maintain clear space around the logo",
-                    "Use approved colors and variants only",
-                    "Scale proportionally per context",
-                    "Preserve optical balance in lockups",
-                  ].map((t, i) => (
-                    <div
-                      key={i}
-                      style={{ display: "flex", gap: 8, marginBottom: 8 }}
-                    >
-                      <span style={{ color: "#30E9BD" }}>✓</span>
-                      <span
-                        style={{ fontFamily: ff, fontSize: 13, color: "#444" }}
-                      >
-                        {t}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-                <div
-                  style={{
-                    background: "#fff5f5",
-                    borderRadius: 12,
-                    padding: 20,
-                    border: "1px solid #fcd5d5",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontFamily: ff,
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: "#e05c5c",
-                      marginBottom: 12,
-                    }}
-                  >
-                    Do Not
-                  </div>
-                  {[
-                    "Distort or stretch the logo",
-                    "Use unapproved colors",
-                    "Rotate the symbol",
-                    "Crop the wordmark or symbol",
-                    "Change letter case or spacing arbitrarily",
-                    "Freely recombine logo elements",
-                  ].map((t, i) => (
-                    <div
-                      key={i}
-                      style={{ display: "flex", gap: 8, marginBottom: 8 }}
-                    >
-                      <span style={{ color: "#e05c5c" }}>✗</span>
-                      <span
-                        style={{ fontFamily: ff, fontSize: 13, color: "#444" }}
-                      >
-                        {t}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
-        </div>
-      );
-    if (activeTab === "partnership")
-      return (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-            gap: 20,
-          }}
-        >
-          {card(
-            <>
-              {badge("Partnership")}
-              <h2
-                style={{
-                  fontFamily: ffSuit,
-                  fontSize: 24,
-                  fontWeight: 900,
-                  color: "#1a1a1a",
-                  marginBottom: 12,
-                }}
-              >
-                Co-branding Rules
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 20,
-                }}
-              >
-                When StoryLine appears alongside a partner brand, use the
-                StoryLine wordmark as the visual anchor. Partner logos must be
-                scaled so they do not overpower the StoryLine identity.
-              </p>
-              <div
-                style={{
-                  background: "#f7f7f5",
-                  borderRadius: 12,
-                  padding: "20px 24px",
-                  textAlign: "center",
-                }}
-              >
-                <span
-                  style={{ fontFamily: ffSuit, fontSize: 24, fontWeight: 900 }}
-                >
-                  <span style={{ color: "#30E9BD" }}>StoryLine</span> @ Partner
-                </span>
-              </div>
-            </>
-          )}
-          {card(
-            <>
-              {badge("Service & Playtag")}
-              <h2
-                style={{
-                  fontFamily: ffSuit,
-                  fontSize: 24,
-                  fontWeight: 900,
-                  color: "#1a1a1a",
-                  marginBottom: 12,
-                }}
-              >
-                Powered by PLAYTAG
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 20,
-                }}
-              >
-                StoryLine and Playtag may appear together in approved lockups.
-                Use the English naming standard and always keep minimum clear
-                space.
-              </p>
-              <div
-                style={{
-                  background: "#f7f7f5",
-                  borderRadius: 12,
-                  padding: "20px 24px",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: ff,
-                    fontSize: 11,
-                    color: "#aaa",
-                    marginBottom: 6,
-                  }}
-                >
-                  Powered by
-                </div>
-                <span
-                  style={{ fontFamily: ffSuit, fontSize: 22, fontWeight: 900 }}
-                >
-                  <span style={{ color: "#30E9BD" }}>StoryLine</span> PLAYTAG
-                </span>
-              </div>
-            </>
-          )}
-        </div>
-      );
-    if (activeTab === "naming")
-      return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          {card(
-            <>
-              {badge("Naming")}
-              <h2
-                style={{
-                  fontFamily: ffSuit,
-                  fontSize: 24,
-                  fontWeight: 900,
-                  color: "#1a1a1a",
-                  marginBottom: 12,
-                }}
-              >
-                Corporate Naming Conventions
-              </h2>
-              <p
-                style={{
-                  fontFamily: ff,
-                  fontSize: 14,
-                  color: "#666",
-                  lineHeight: 1.7,
-                  marginBottom: 24,
-                }}
-              >
-                Consistent naming reinforces brand recognition. Always follow
-                these conventions across all channels.
-              </p>
-              {[
-                [
-                  "Product name",
-                  "StoryLine (capital S, capital L — never Storyline or STORYLINE)",
-                ],
-                ["Company name", "Playtag (not PLAYTAG in body text)"],
-                [
-                  "Combined reference",
-                  "StoryLine by Playtag / Powered by Playtag",
-                ],
-                ["Domain", "storyline.playtag.ai"],
-              ].map(([label, rule]) => (
-                <div
-                  key={label}
-                  style={{
-                    display: "flex",
-                    gap: 16,
-                    alignItems: "flex-start",
-                    padding: "14px 0",
-                    borderBottom: "1px solid #f0f0ec",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: ff,
-                      fontSize: 13,
-                      fontWeight: 700,
-                      color: "#1a1a1a",
-                      minWidth: 140,
-                    }}
-                  >
-                    {label}
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: ff,
-                      fontSize: 13,
-                      color: "#666",
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    {rule}
-                  </span>
-                </div>
-              ))}
-            </>
-          )}
-        </div>
-      );
-    if (activeTab === "contact")
-      return (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div
-            style={{
-              background: "linear-gradient(135deg, #E8FDF6, #F0FBF8)",
-              borderRadius: 16,
-              border: "1.5px solid #C8F5E8",
-              padding: 40,
-            }}
-          >
-            <h2
-              style={{
-                fontFamily: ffSuit,
-                fontSize: 28,
-                fontWeight: 900,
-                color: "#1a1a1a",
-                marginBottom: 12,
-              }}
-            >
-              Any Inquiries
-            </h2>
-            <p
-              style={{
-                fontFamily: ff,
-                fontSize: 14,
-                color: "#666",
-                lineHeight: 1.7,
-                marginBottom: 24,
-              }}
-            >
-              For any questions related to the StoryLine brand guidelines,
-              please contact us.
-              <br />
-              If you are unsure about a brand application, reach out before
-              using.
-            </p>
-            <a
-              href="mailto:pr@playtag.ai"
-              style={{
-                display: "block",
-                fontFamily: ffSuit,
-                fontSize: 28,
-                fontWeight: 900,
-                color: "#1a1a1a",
-                textDecoration: "none",
-                marginBottom: 24,
-              }}
-            >
-              pr@playtag.ai
-            </a>
-            <p
-              style={{ fontFamily: ff, fontSize: 13, color: "#aaa", margin: 0 }}
-            >
-              StoryLine, empowered by Playtag.
-            </p>
-          </div>
-        </div>
-      );
-    return null;
-  };
 
   return (
     <section
@@ -3563,33 +2732,45 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
         <button
           onClick={() => setSelectedKit(null)}
           style={{
-            background: "#f5f5f3",
-            border: "1.5px solid #e0e0da",
-            borderRadius: 8,
+            background: "#fff",
+            border: "1.5px solid #e8e8e4",
+            borderRadius: 100,
+            padding: "8px 18px 8px 14px",
             fontFamily: ff,
-            fontSize: 14,
-            color: "#444",
+            fontSize: 13,
+            fontWeight: 600,
+            color: "#555",
             cursor: "pointer",
-            display: "flex",
+            display: "inline-flex",
             alignItems: "center",
             gap: 6,
             marginBottom: 32,
-            padding: "8px 16px",
-            fontWeight: 500,
-            transition: "background 0.15s, border-color 0.15s, color 0.15s",
+            transition: "all 0.2s",
           }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.background = "#ebebе8";
-            e.currentTarget.style.borderColor = "#bbb";
-            e.currentTarget.style.color = "#111";
+            e.currentTarget.style.background = "#1a1a1a";
+            e.currentTarget.style.borderColor = "#1a1a1a";
+            e.currentTarget.style.color = "#fff";
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.background = "#f5f5f3";
-            e.currentTarget.style.borderColor = "#e0e0da";
-            e.currentTarget.style.color = "#444";
+            e.currentTarget.style.background = "#fff";
+            e.currentTarget.style.borderColor = "#e8e8e4";
+            e.currentTarget.style.color = "#555";
           }}
         >
-          ← Back to Toolkit
+          <svg
+            width="14"
+            height="14"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          Back to home
         </button>
       </AnimatedSection>
       <AnimatedSection delay={100}>
@@ -3631,7 +2812,7 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
               >
                 Brand Kit
               </h1>
-              <p style={{ fontFamily: ff, fontSize: 15, color: "#000" }}>
+              <p style={{ fontFamily: ff, fontSize: 15, color: "#999" }}>
                 Communication Materials for Social Media
               </p>
             </div>
@@ -3664,235 +2845,41 @@ function BrandKitPage({ kit, setSelectedKit, setPage }) {
         </div>
       </AnimatedSection>
       {kit.documents && kit.documents.length > 0 && (
-        <AnimatedSection delay={150}>
-          <div style={{ marginBottom: 40 }}>
+        <>
+          <AnimatedSection delay={200}>
             <h3
               style={{
                 fontFamily: ff,
                 fontSize: 15,
                 fontWeight: 700,
                 color: "#1a1a1a",
-                marginBottom: 20,
+                marginBottom: 24,
               }}
             >
               Available Documents ({kit.documents.length})
             </h3>
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-                gap: 16,
-              }}
-            >
-              {kit.documents.map((doc, i) => {
-                const hasFile = !!doc.file_url;
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      background: "#fff",
-                      borderRadius: 16,
-                      border: "1.5px solid #e8e8e4",
-                      overflow: "hidden",
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: "100%",
-                        height: 160,
-                        background: "#F4FBF7",
-                        overflow: "hidden",
-                        position: "relative",
-                      }}
-                    >
-                      {doc.thumbnail_url ? (
-                        <img
-                          src={doc.thumbnail_url}
-                          alt={doc.title}
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            objectFit: "cover",
-                            objectPosition: "top",
-                          }}
-                          onError={(e) => {
-                            e.target.style.display = "none";
-                          }}
-                        />
-                      ) : (
-                        <div
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: 36,
-                          }}
-                        >
-                          {doc.type === "Video"
-                            ? "🎬"
-                            : doc.type === "Logo" &&
-                              doc.title.toLowerCase().includes("playtag")
-                            ? "🅪"
-                            : doc.type === "Logo"
-                            ? "🏷️"
-                            : doc.type === "Color"
-                            ? "🎨"
-                            : "📄"}
-                        </div>
-                      )}
-                      <div
-                        style={{
-                          position: "absolute",
-                          top: 10,
-                          left: 12,
-                          background: "rgba(255,255,255,0.92)",
-                          border: "1px solid #C8E6D8",
-                          borderRadius: 6,
-                          padding: "3px 10px",
-                          fontFamily: ff,
-                          fontSize: 11,
-                          fontWeight: 700,
-                          color: "#0FB896",
-                        }}
-                      >
-                        {doc.type}
-                      </div>
-                    </div>
-                    <div style={{ padding: "18px 22px 22px" }}>
-                      <h4
-                        style={{
-                          fontFamily: ff,
-                          fontSize: 14,
-                          fontWeight: 700,
-                          color: "#1a1a1a",
-                          marginBottom: 12,
-                          lineHeight: 1.4,
-                        }}
-                      >
-                        {doc.title}
-                      </h4>
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                          alignItems: "center",
-                        }}
-                      >
-                        <span
-                          style={{
-                            fontFamily: ff,
-                            fontSize: 11,
-                            color: "#bbb",
-                          }}
-                        >
-                          Updated {doc.date}
-                        </span>
-                        {hasFile ? (
-                          <button
-                            onClick={() =>
-                              handleBrandDownload(doc.file_url, doc.title)
-                            }
-                            style={{
-                              background: "#fff",
-                              border: "1.5px solid #30E9BD",
-                              borderRadius: 100,
-                              padding: "6px 16px",
-                              fontFamily: ff,
-                              fontSize: 12,
-                              fontWeight: 700,
-                              color: "#30E9BD",
-                              cursor: "pointer",
-                              display: "inline-flex",
-                              alignItems: "center",
-                              gap: 6,
-                            }}
-                            onMouseEnter={(e) => {
-                              e.currentTarget.style.background = "#30E9BD";
-                              e.currentTarget.style.color = "#fff";
-                            }}
-                            onMouseLeave={(e) => {
-                              e.currentTarget.style.background = "#fff";
-                              e.currentTarget.style.color = "#30E9BD";
-                            }}
-                          >
-                            Download
-                          </button>
-                        ) : (
-                          <span
-                            style={{
-                              fontFamily: ff,
-                              fontSize: 12,
-                              color: "#ccc",
-                              padding: "6px 16px",
-                              border: "1.5px solid #eee",
-                              borderRadius: 100,
-                            }}
-                          >
-                            Coming soon
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+          </AnimatedSection>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))",
+              gap: 20,
+            }}
+          >
+            {kit.documents.map((doc, i) => (
+              <AnimatedSection key={i} delay={300 + i * 100}>
+                <DocCard
+                  doc={doc}
+                  downloading={false}
+                  onDownload={() =>
+                    handleBrandDownload(doc.file_url, doc.title)
+                  }
+                />
+              </AnimatedSection>
+            ))}
           </div>
-        </AnimatedSection>
+        </>
       )}
-      <AnimatedSection delay={200}>
-        <div
-          style={{
-            display: "flex",
-            gap: 8,
-            overflowX: "auto",
-            paddingBottom: 4,
-            marginBottom: 28,
-            scrollbarWidth: "none",
-          }}
-        >
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              style={{
-                flexShrink: 0,
-                background: activeTab === tab.id ? "#1a1a1a" : "#fff",
-                border:
-                  activeTab === tab.id
-                    ? "1.5px solid #1a1a1a"
-                    : "1.5px solid #e8e8e4",
-                borderRadius: 100,
-                padding: "8px 18px",
-                fontFamily: ff,
-                fontSize: 13,
-                fontWeight: activeTab === tab.id ? 700 : 400,
-                color: activeTab === tab.id ? "#fff" : "#666",
-                cursor: "pointer",
-                transition: "all 0.2s",
-                whiteSpace: "nowrap",
-              }}
-              onMouseEnter={(e) => {
-                if (activeTab !== tab.id) {
-                  e.currentTarget.style.borderColor = "#1a1a1a";
-                  e.currentTarget.style.color = "#1a1a1a";
-                }
-              }}
-              onMouseLeave={(e) => {
-                if (activeTab !== tab.id) {
-                  e.currentTarget.style.borderColor = "#e8e8e4";
-                  e.currentTarget.style.color = "#666";
-                }
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </AnimatedSection>
-      <AnimatedSection delay={250}>{renderTab()}</AnimatedSection>
     </section>
   );
 }
