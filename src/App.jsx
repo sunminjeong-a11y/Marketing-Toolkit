@@ -139,9 +139,9 @@ const FALLBACK_KITS = [
         type: "Kit",
         title: "StoryLine Brand Kit",
         desc: "Full brand asset package — logos, wordmarks, signatures, and source files.",
-        date: "2026-05-03",
+        date: "2026-05-04",
         file_url:
-          "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/Storyline-Brand-Kit.zip",
+          "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/Storyline-BrandKit.zip",
         thumbnail_url:
           "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/brand-kit-thumbnail-d.png",
       },
@@ -149,9 +149,9 @@ const FALLBACK_KITS = [
         type: "Guideline",
         title: "StoryLine Brand Guidelines",
         desc: "Official StoryLine brand guidelines — logo, color, typography, and usage rules.",
-        date: "2026-05-03",
+        date: "2026-05-04",
         file_url:
-          "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/Storyline_BrandGuidelines.pdf",
+          "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/Storyline-BrandGuidelines.pdf",
         thumbnail_url:
           "https://rxokrzsbfnttgchketde.supabase.co/storage/v1/object/public/documents/brand-guidelines-thumbnail.png",
       },
