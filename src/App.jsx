@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import AdminPanel from "./AdminPanel.jsx";
 
 // ─── Supabase 설정 ───────────────────────────────────────────────────────────
 const SUPABASE_URL = "https://rxokrzsbfnttgchketde.supabase.co";
@@ -1420,7 +1421,7 @@ function ContactSection() {
   );
 }
 
-function Footer({ setPage, setSelectedKit, kits = [] }) {
+function Footer({ setPage, setSelectedKit, kits = [], onAdminClick }) {
   const col = {
     label: {
       fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
@@ -1640,9 +1641,50 @@ function Footer({ setPage, setSelectedKit, kits = [] }) {
             fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
             fontSize: 13,
             color: "rgba(234,251,243,0.4)",
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 14,
           }}
         >
           COPPA · FERPA · State-privacy compliant
+          <button
+            onClick={onAdminClick}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              background: "none",
+              border: "none",
+              padding: 0,
+              fontFamily: "'Pretendard Variable','Pretendard',sans-serif",
+              fontSize: 13,
+              fontWeight: 600,
+              color: "rgba(234,251,243,0.7)",
+              cursor: "pointer",
+              transition: "color 0.2s",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.color = "#2EE8B8")}
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.color = "rgba(234,251,243,0.7)")
+            }
+            aria-label="Admin"
+          >
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <rect x="4" y="11" width="16" height="10" rx="2" />
+              <path d="M8 11V8a4 4 0 0 1 8 0v3" />
+            </svg>
+            Admin
+          </button>
         </span>
       </div>
     </footer>
@@ -3019,7 +3061,16 @@ export default function StoryLineToolkit() {
         />
       )}
       {page === "privacy" && <PrivacyPage />}
-      <Footer setPage={setPage} setSelectedKit={setSelectedKit} kits={kits} />
+      {page === "admin" && <AdminPanel />}
+      <Footer
+        setPage={setPage}
+        setSelectedKit={setSelectedKit}
+        kits={kits}
+        onAdminClick={() => {
+          setSelectedKit(null);
+          setPage("admin");
+        }}
+      />
     </div>
   );
 }

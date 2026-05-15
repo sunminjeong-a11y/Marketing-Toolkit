@@ -1,0 +1,16 @@
+# Supabase project config (used by `supabase link` / `supabase functions deploy`).
+# project_id should match the ref in your Supabase URL: rxokrzsbfnttgchketde
+
+project_id = "rxokrzsbfnttgchketde"
+
+[functions.admin-verify]
+verify_jwt = false
+
+[functions.admin-upload]
+verify_jwt = false
+
+[functions.admin-update]
+verify_jwt = false
+
+[functions.admin-delete]
+verify_jwt = false
